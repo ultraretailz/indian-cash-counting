@@ -1,0 +1,2 @@
+rootProject.name = "Indian Cash Counting"
+include ':app'
