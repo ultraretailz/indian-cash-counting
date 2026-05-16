@@ -1,0 +1,1 @@
+-keep class com.example.indian_cash_counting.** { *; }
