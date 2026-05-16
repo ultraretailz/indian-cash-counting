@@ -1,0 +1,30 @@
+include ':app'
+
+def localPropertiesFile = new File(rootProject.projectDir, 'local.properties')
+def properties = new Properties()
+
+if (localPropertiesFile.exists()) {
+    properties.load(localPropertiesFile.newDataInputStream())
+}
+
+def flutterSdkPath = properties.getProperty('flutter.sdk')
+if (flutterSdkPath == null) {
+    throw new GradleException('Flutter SDK not found. Define location with flutter.sdk in the local.properties file.')
+}
+
+def flutterRoot = new File(flutterSdkPath)
+def pluginCount = 0
+def plugins = new Properties()
+def flutterPluginsFile = new File(flutterRoot, '.pub-cache/hosted/pub.dartlang.org')
+if (flutterPluginsFile.exists()) {
+    flutterPluginsFile.eachFile { pluginDir ->
+        if (pluginDir.isDirectory()) {
+            def pubspecFile = new File(pluginDir, 'pubspec.yaml')
+            if (pubspecFile.exists()) {
+                pluginCount++
+            }
+        }
+    }
+}
+
+apply from: "${flutterRoot}/packages/flutter_tools/gradle/app_plugin_loader.gradle"
